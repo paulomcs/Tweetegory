@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Analisador de texto</title>
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+			margin: 0;
+			padding: 0;
+		}
+		
+		h1 {
+			text-align: center;
+			margin: 50px 0;
+		}
+		
+		form {
+			width: 50%;
+			margin: 0 auto;
+			text-align: center;
+		}
+		
+		input[type="submit"] {
+			background-color: #4CAF50;
+			border: none;
+			color: white;
+			padding: 10px;
+			text-align: center;
+			text-decoration: none;
+			display: inline-block;
+			font-size: 16px;
+			margin: 10px;
+			cursor: pointer;
+		}
+		
+		input[type="text"] {
+			width: 80%;
+			padding: 12px 20px;
+			margin: 8px 0;
+			box-sizing: border-box;
+			border: 2px solid #ccc;
+			border-radius: 4px;
+			background-color: #f8f8f8;
+			font-size: 16px;
+		}
+		
+		p {
+			text-align: center;
+			margin: 50px 0;
+			font-size: 18px;
+		}
+	</style>
+</head>
+<body>
+	<h1>Analisador de Tweets</h1>
+	<form onsubmit="return false;">
+		<label for="texto">Insira o texto(tweet):</label>
+		<input type="text" id="texto" name="texto">
+		<br>
+		<input type="submit" value="Analisar" onclick="analisarTexto()">
+	</form>
+	<p id="resultado"></p>
+
+	<script>
+		function analisarTexto() {
+			let texto = document.getElementById("texto").value;
+			let resultado = document.getElementById("resultado");
+			
+			if (texto === "") {
+				resultado.innerHTML = "Por favor, insira um texto para ser analisado.";
+				return;
+			}
+			
+			if (/^\d+$/.test(texto)) {
+				resultado.innerHTML = "O texto inserido é um número.";
+			} else if (/^[a-zA-Z]+$/.test(texto)) {
+				resultado.innerHTML = "O texto inserido é uma palavra.";
+			} else {
+				resultado.innerHTML = "O texto inserido é uma frase ou parágrafo.";
+			}
+		}
+	</script>
+</body>
+</html>
