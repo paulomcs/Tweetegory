@@ -1,3 +1,4 @@
+# Importação das Bibliotecas Necessarias
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.cluster import KMeans
 import numpy as np
@@ -6,11 +7,16 @@ import nltk
 import spacy
 import string
 import re
+
+# Downloads necessários
 nltk.download('punkt')
 nltk.download('stopwords')
 from nltk.corpus import stopwords
+
+
 pln = spacy.load("pt_core_news_sm")
 
+# Leitura do arquivos com tweets já processados
 with open("tweets_Todos_processados.txt", 'r', encoding='unicode_escape') as base_original:
     tweets_Todos_processados = base_original.readlines()
 
@@ -27,7 +33,8 @@ caracteres_indesejaveis = ['—', 'de o', 'de a', 'a o', 'em o', 'em a', 'rt', '
 # simulando o tweet inserido pelo usuário
 tweet_usuario = "@joao_omotinha: Real Madrid x Machester City vai ser um belo jogo #champions"
 
-
+# Funcao que ira processar o tweet do usuario
+# Atenção: muito a melhorar, mas ja ajudou bastante
 def processamento_texto(texto):
   # Letra minúscula
   texto = texto.lower()
@@ -72,20 +79,29 @@ tweet_usuario_processado = processamento_texto(tweet_usuario)
 # concatena base anterior com tweet do usuário
 tweets_Todos_processados.append(tweet_usuario_processado)
 
-# print(tweets_Todos_processados)
 
+# Construicao da representacao TF-IDF
 vetor_palavras = TfidfVectorizer()
-
-
 palavras_vetorizadas = vetor_palavras.fit_transform(tweets_Todos_processados)
 
-
+# Realizacao do agrupamento
 kmeans_tweets = KMeans(n_clusters=5, n_init=15)
 kmeans_tweets.fit(palavras_vetorizadas)
 
-
+# Lista com os rotulos (grupos) dos tweets
 rotulos = kmeans_tweets.labels_
 
+# Pega o rotulo do tweets do usuario
 rotulo_usuario = rotulos[-1]
 
+# Criacao de um dataframe de 2 colunas (Tweets,Rotulos)
+dataframe = pd.DataFrame({'Tweets': tweets_Todos_processados, 'Cluster': rotulos})
+
+# Lista com os tweets que foram agrupados no mesmo cluster que o tweet do usuario
+tweets_agrupados = dataframe.loc[dataframe['Cluster'] == rotulo_usuario]['Tweets'].tolist()
+
+# Imprime o cluster do usuario
 print(rotulo_usuario)
+
+# Imprime os tweets que fazem parte do cluster do usuario
+print(tweets_agrupados)
