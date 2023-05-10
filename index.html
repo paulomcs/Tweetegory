@@ -13,6 +13,8 @@
 	<style>
 		body {
 			font-family: Arial, sans-serif;
+			background-color: #1DA1F2;
+			color: white;
 			margin: 0;
 			padding: 0;
 		}
@@ -29,9 +31,9 @@
 		}
 		
 		input[type="submit"] {
-			background-color: #4CAF50;
+			background-color: #ebebeb;
 			border: none;
-			color: white;
+			color: black;
 			padding: 10px;
 			text-align: center;
 			text-decoration: none;
@@ -39,17 +41,24 @@
 			font-size: 16px;
 			margin: 10px;
 			cursor: pointer;
+			transition: background 0.5s ease-in-out;
+			transition: color 0.5s ease-in-out;
 		}
 		
-		input[type="text"] {
+		textarea {
 			width: 80%;
+			height: 200px;
 			padding: 12px 20px;
 			margin: 8px 0;
 			box-sizing: border-box;
-			border: 2px solid #ccc;
+			border: 2px solid #1DA1F2;
 			border-radius: 4px;
 			background-color: #f8f8f8;
 			font-size: 16px;
+		}
+
+		textarea:focus {
+			border: 3px ridge #b9e0ff;
 		}
 		
 		p {
@@ -57,20 +66,24 @@
 			margin: 50px 0;
 			font-size: 18px;
 		}
-		.sub:hover {background-color: #16970d;}
+		.sub:hover {
+			background-color: #97d9ff;
+			color:white;
+		}
 	</style>
 </head>
 <body>
 	<h1>Analisador de Tweets</h1>
 	<form onsubmit="return false;">
 		<label for="texto">Insira o texto(tweet):</label>
-		<input type="text" id="texto" name="texto">
+		<textarea class="textinput" id="texto" rows="3" cols="80"></textarea>
 		<br>
 		<input type="submit" value="Analisar" onclick="analisarTexto()" class="sub">
 	</form>
 	<p id="resultado"></p>
 
 	<script>
+		
 		function analisarTexto() {
 			let texto = document.getElementById("texto").value;
 			let resultado = document.getElementById("resultado");
@@ -80,12 +93,51 @@
 				return;
 			}
 			
-			if (/^\d+$/.test(texto)) {
-				resultado.innerHTML = "O texto inserido é um número.";
-			} else if (/^[a-zA-Z]+$/.test(texto)) {
-				resultado.innerHTML = "O texto inserido é uma palavra.";
-			} else {
-				resultado.innerHTML = "O texto inserido é uma frase ou parágrafo.";
+			resultado.innerHTML = "";
+		}
+
+		const texto = document.getElementById("texto");
+		texto.value = "carregando Py ... ";
+		async function main() {
+			let pyodide = await loadPyodide();
+			texto.value += "Pyodide carregado com sucesso!\n";
+			return pyodide;
+		}
+
+		let pyodideReadyPromise = main();
+
+		async function evaluatePython() {
+        let pyodide = await pyodideReadyPromise;
+        	try {
+        	  	let python_code = (await (await fetch('bayesian_alarmbayes.py')).text());
+        	  	pyodide.runPython(python_code);
+        	  	let output = pyodide.runPython(code.value);
+        	  	addToOutput(output);
+        	} catch (err) {
+        	  	addToOutput(err);
+        	}
+      	}
+	</script>
+
+
+
+	<!-- PWA -->
+	<script>
+		window.addEventListener('load', () => {
+			registerSW();
+		});
+
+		// Registro do Service Worker
+		async function registerSW() {
+			if ('serviceWorker' in navigator) {
+				try {
+					await navigator
+							.serviceWorker
+							.register('serviceworker.js');
+				}
+				catch (e) {
+					console.log('SW registration failed');
+				}
 			}
 		}
 	</script>

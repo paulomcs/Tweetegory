@@ -6,17 +6,6 @@
 	"background_color":"white",
 	"theme_color":"#4CAF50",
 	"scope": ".",
-	"description":"Exemplo de uso Pyodide e PWA",
-	"icons":[
-	{
-        "src":"alarm.png",					
-        "sizes":"160x160",
-        "type":"image/png"
-	},
-	{
-        "src":"alarm.png",
-        "sizes":"160x160",
-        "type":"image/png"
-	}
-    ]
+	"description":"Exemplo de uso Pyodide e PWA"
+	
 }
