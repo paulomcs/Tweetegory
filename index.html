@@ -1,8 +1,15 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>Analisador de texto</title>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="manifest" href="manifest.json">
+	<title>Tweetei</title>
+
+	<script src="https://cdn.jsdelivr.net/pyodide/v0.23.1/full/pyodide.js"></script>
+
+	
 	<style>
 		body {
 			font-family: Arial, sans-serif;
@@ -50,6 +57,7 @@
 			margin: 50px 0;
 			font-size: 18px;
 		}
+		.sub:hover {background-color: #16970d;}
 	</style>
 </head>
 <body>
@@ -58,7 +66,7 @@
 		<label for="texto">Insira o texto(tweet):</label>
 		<input type="text" id="texto" name="texto">
 		<br>
-		<input type="submit" value="Analisar" onclick="analisarTexto()">
+		<input type="submit" value="Analisar" onclick="analisarTexto()" class="sub">
 	</form>
 	<p id="resultado"></p>
 
@@ -83,3 +91,5 @@
 	</script>
 </body>
 </html>
+
+
